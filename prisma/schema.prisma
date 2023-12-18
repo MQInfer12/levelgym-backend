@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Empleado {
+  id           Int           @id @default(autoincrement())
+  nombre       String
+  turno        String
+  usuario      String        @unique
+  password     String
+  refreshToken String?       @unique
+  activo       Boolean       @default(true)
+  Venta        Venta[]
+  Inscripcion  Inscripcion[]
+  Almacen      Almacen[]
+}
+
+model Paquete {
+  id          Int           @id @default(autoincrement())
+  nombre      String
+  precio      Float
+  dias        Int
+  activo      Boolean       @default(true)
+  Inscripcion Inscripcion[]
+}
+
+model Cliente {
+  id          Int           @id @default(autoincrement())
+  nombre      String
+  activo      Boolean       @default(true)
+  Inscripcion Inscripcion[]
+}
+
+model Inscripcion {
+  id               Int          @id @default(autoincrement())
+  clienteId        Int
+  empleadoId       Int
+  paqueteId        Int
+  descuento        Float?
+  total            Float
+  tipoPago         String
+  diasRestantes    Int
+  fechaInicio      String
+  fechaLimite      String
+  detalleDescuento String?
+  cliente          Cliente      @relation(fields: [clienteId], references: [id])
+  empleado         Empleado     @relation(fields: [empleadoId], references: [id])
+  paquete          Paquete      @relation(fields: [paqueteId], references: [id])
+  Asistencia       Asistencia[]
+}
+
+model Venta {
+  id           Int            @id @default(autoincrement())
+  empleadoId   Int
+  total        Float
+  fecha        DateTime       @default(now())
+  empleado     Empleado       @relation(fields: [empleadoId], references: [id])
+  DetalleVenta DetalleVenta[]
+}
+
+model Producto {
+  id       Int     @id @default(autoincrement())
+  nombre   String
+  precio   Float
+  cantidad Int
+  activo   Boolean @default(true)
+
+  Almacen      Almacen[]
+  DetalleVenta DetalleVenta[]
+}
+
+model DetalleVenta {
+  id            Int      @id @default(autoincrement())
+  productoId    Int
+  ventaId       Int
+  cantidad      Int
+  precioVendido Float
+  total         Float
+  producto      Producto @relation(fields: [productoId], references: [id])
+  venta         Venta    @relation(fields: [ventaId], references: [id])
+}
+
+model Almacen {
+  id                Int      @id @default(autoincrement())
+  productoId        Int
+  cantidadAumentada Int
+  totalCompra       Float
+  empleadoId        Int
+  fecha             DateTime @default(now())
+  producto          Producto @relation(fields: [productoId], references: [id])
+  empleado          Empleado @relation(fields: [empleadoId], references: [id])
+}
+
+model Asistencia {
+  id            Int         @id @default(autoincrement())
+  inscripcionId Int
+  fecha         DateTime    @default(now())
+  inscripcion   Inscripcion @relation(fields: [inscripcionId], references: [id])
+}
