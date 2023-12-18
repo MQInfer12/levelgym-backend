@@ -8,9 +8,9 @@ app.get("/admin", async (req, res) => {
   try {
     let empleado = await prisma.empleado.create({
       data: {
-        nombre: "jose",
-        password: await bcrypt.hash(req.body.password, 10),
-        usuario: "jose",
+        nombre: "Administrador",
+        password: await bcrypt.hash("password", 10),
+        usuario: "admin",
         turno: "Tarde",
       },
     });
