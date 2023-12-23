@@ -13,6 +13,7 @@ import inscripcion from "./controllers/inscripcion.js";
 import asistencia from "./controllers/asistencia.js";
 import auth, { authenticateToken } from "./controllers/auth.js";
 import excel from "./controllers/excelIncripciones.js";
+import promociones from "./controllers/promociones.js";
 
 const app = express();
 const port = 3000;
@@ -38,6 +39,7 @@ app.use(producto);
 app.use(venta);
 app.use(inscripcion);
 app.use(asistencia);
+app.use(promociones);
 app.use(excel);
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

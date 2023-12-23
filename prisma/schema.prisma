@@ -105,3 +105,10 @@ model Asistencia {
   fecha         DateTime    @default(now())
   inscripcion   Inscripcion @relation(fields: [inscripcionId], references: [id])
 }
+
+model Promociones {
+  id          Int    @id @default(autoincrement())
+  foto        String
+  titulo      String 
+  descripcion String
+}

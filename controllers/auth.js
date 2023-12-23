@@ -94,10 +94,12 @@ export function authenticateToken(req, res, next) {
     req.path === "/token" ||
     req.path === "/logout" ||
     req.path === "/admin" ||
+    req.path === "/excelempleado/1" ||
+    req.path === "/exceladministrador" ||
+
     req.path === "/venta"
   )
     return next();
-
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) {
