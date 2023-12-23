@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import cors from 'cors';
+import cors from "cors";
 import cliente from "./controllers/cliente.js";
 import almacen from "./controllers/almacen.js";
 import detalleVenta from "./controllers/detalleVenta.js";
@@ -9,9 +9,10 @@ import empleado from "./controllers/empleado.js";
 import paquete from "./controllers/paquete.js";
 import producto from "./controllers/producto.js";
 import venta from "./controllers/venta.js";
-import inscripcion  from "./controllers/inscripcion.js";
-import asistencia  from "./controllers/asistencia.js";
-import auth, { authenticateToken } from './controllers/auth.js';
+import inscripcion from "./controllers/inscripcion.js";
+import asistencia from "./controllers/asistencia.js";
+import auth, { authenticateToken } from "./controllers/auth.js";
+import excel from "./controllers/excelIncripciones.js";
 
 const app = express();
 const port = 3000;
@@ -37,6 +38,7 @@ app.use(producto);
 app.use(venta);
 app.use(inscripcion);
 app.use(asistencia);
+app.use(excel);
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });

@@ -8,8 +8,11 @@ app.get("/inscripcion", async (req, res) => {
     const inscripcion = await prisma.inscripcion.findMany({
       include: {
         cliente: true,
-        paquete: true
-      }
+        paquete: true,
+      },
+      orderBy: {
+        fechaInicio: "desc",
+      },
     });
     res.json({
       data: inscripcion,
@@ -18,8 +21,8 @@ app.get("/inscripcion", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error al obtener inscripcion",
-      error: error.message
-    })
+      error: error.message,
+    });
   }
 });
 
@@ -27,12 +30,12 @@ app.get("/inscripcion/:id", async (req, res) => {
   try {
     const inscripcion = await prisma.inscripcion.findUnique({
       where: {
-        id: Number(req.params.id)
+        id: Number(req.params.id),
       },
       include: {
         cliente: true,
-        paquete: true
-      }
+        paquete: true,
+      },
     });
     res.json({
       data: inscripcion,
@@ -41,8 +44,8 @@ app.get("/inscripcion/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error al obtener inscripcion",
-      error: error.message
-    })
+      error: error.message,
+    });
   }
 });
 
@@ -50,9 +53,10 @@ app.post("/inscripcion", async (req, res) => {
   try {
     const paquete = await prisma.paquete.findUnique({
       where: {
-        id: req.body.idPaquete
-      }
+        id: req.body.idPaquete,
+      },
     });
+    console.log(req.body.fechaInicio);
     const inscripcion = await prisma.inscripcion.create({
       data: {
         clienteId: req.body.idCliente,
@@ -63,77 +67,77 @@ app.post("/inscripcion", async (req, res) => {
         fechaLimite: req.body.fechaLimite,
         total: paquete.precio - req.body.descuento,
         diasRestantes: paquete.dias,
-        empleadoId: req.user.id
-      }
+        empleadoId: req.user.id,
+      },
     });
     res.json({
       data: inscripcion,
-      message: "inscripcion agregado correctamente"
-    })
+      message: "inscripcion agregado correctamente",
+    });
   } catch (error) {
     res.status(500).json({
       message: "Error al crear inscripcion",
-      error: error.message
-    })
+      error: error.message,
+    });
   }
-})
+});
 
 app.put("/inscripcion/:id", async (req, res) => {
   try {
     const inscripcion = await prisma.inscripcion.update({
       where: {
-        id: Number(req.params.id)
+        id: Number(req.params.id),
       },
-      data: req.body
-    })
+      data: req.body,
+    });
     res.json({
       data: inscripcion,
-      message: "inscripcion actualizado correctamente"
-    })
+      message: "inscripcion actualizado correctamente",
+    });
   } catch (error) {
     res.status(500).json({
       message: "Error al actualizar inscripcion",
-      error: error.message
-    })
+      error: error.message,
+    });
   }
-})
+});
 
 app.delete("/inscripcion/:id", async (req, res) => {
   try {
     const inscripcion = await prisma.inscripcion.delete({
       where: {
-        id: Number(req.params.id)
-      }
-    })
+        id: Number(req.params.id),
+      },
+    });
     res.json({
       data: inscripcion,
-      message: "inscripcion eliminada"
-    })
+      message: "inscripcion eliminada",
+    });
   } catch (error) {
     res.status(500).json({
       message: "Error al eliminar inscripcion",
-      error: error.message
-    })
+      error: error.message,
+    });
   }
 });
 
-app.post("/inscripcion/:id",async(req,res)=>{
+app.post("/inscripcion/:id", async (req, res) => {
   try {
-    const inscripcion=await prisma.inscripcion.findMany({
-      where:{
-        id:Number(req.params.id)
-      }
-    })
+    const inscripcion = await prisma.inscripcion.findMany({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
     res.json({
-      data:inscripcion,
-      message:"incripcion obtenido correctamente"
-    })
+      data: inscripcion,
+      message: "incripcion obtenido correctamente",
+    });
   } catch (error) {
     res.status(500).json({
-      message:"Error al obtener el inscripcion",
-      error:message.error
-    })
+      message: "Error al obtener el inscripcion",
+      error: message.error,
+    });
   }
-})
+});
 
 export default app;

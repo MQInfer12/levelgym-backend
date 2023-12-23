@@ -81,7 +81,7 @@ app.post("/login", async (req, res) => {
 });
 
 function generarToken(user) {
-  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "5m" });
+  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "1440m" });
 }
 
 export function generateRefreshToken(user) {
@@ -94,8 +94,7 @@ export function authenticateToken(req, res, next) {
     req.path === "/token" ||
     req.path === "/logout" ||
     req.path === "/admin" ||
-    req.path === "/venta"||
-    req.path==="/producto"
+    req.path === "/venta"
   )
     return next();
 

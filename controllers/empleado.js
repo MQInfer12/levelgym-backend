@@ -64,7 +64,7 @@ app.post("/empleado", async (req, res) => {
       message: "Empleado agregado correctamente",
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(409).json({
       message: "Error al crear empleado",
       error: error.message,
     });
@@ -72,11 +72,16 @@ app.post("/empleado", async (req, res) => {
 });
 app.put("/empleado/:id", async (req, res) => {
   try {
+    const password = req.body.password;
+    const hashedPassword = await bcrypt.hash(password, 10);
     const empleado = await prisma.empleado.update({
       where: {
         id: Number(req.params.id),
       },
-      data: req.body,
+      data: {
+        ...req.body,
+        password: hashedPassword,
+      },
     });
     res.json({
       data: empleado,

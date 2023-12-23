@@ -10,6 +10,9 @@ app.get("/venta", async (req, res) => {
         DetalleVenta: true,
         empleado: true,
       },
+      orderBy: {
+        fecha: "desc",
+      },
     });
     res.json({
       data: venta,

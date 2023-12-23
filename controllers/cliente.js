@@ -5,7 +5,11 @@ const prisma = new PrismaClient();
 
 app.get("/cliente", async (req, res) => {
   try {
-    const cliente = await prisma.cliente.findMany({});
+    const cliente = await prisma.cliente.findMany({
+      orderBy: {
+        id: "desc"
+      }
+    });
     res.json({
       data: cliente,
       message: "cliente obtenido con correctamente",
